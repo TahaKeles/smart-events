@@ -5,6 +5,7 @@ const {
   getEvents,
   rsvpEvent,
   getRecommendedEvents,
+  getEventById,
 } = require("../controllers/eventController");
 const authMiddleware = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
@@ -21,7 +22,8 @@ const authMiddleware = (req, res, next) => {
 };
 
 router.post("/", authMiddleware, createEvent);
-router.get("/", getEvents);
+router.get("/", authMiddleware, getEvents);
+router.get("/:eventId", authMiddleware, getEventById);
 router.post("/:eventId/rsvp", authMiddleware, rsvpEvent);
 router.get("/recommendations", authMiddleware, getRecommendedEvents);
 

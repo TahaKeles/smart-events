@@ -13,7 +13,11 @@ function Dashboard() {
         setLoading(true);
         const token = localStorage.getItem('token');
         console.log("process.env.REACT_APP_API_URL", process.env.REACT_APP_API_URL);
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/events`); // all events
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/events`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }); // all events
         setEvents(res.data);
       } catch (err) {
         console.error(err);
@@ -166,7 +170,7 @@ function Dashboard() {
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap'
                   }}>
-                    {event.location?.address || 'Location TBA'}
+                    {event.venue || 'New York, NY'}
                   </span>
                 </div>
                 
@@ -214,16 +218,105 @@ function Dashboard() {
       {events.length === 0 && !loading && (
         <div style={{ 
           textAlign: 'center', 
-          padding: '3rem 1rem',
-          color: '#6b7280',
-          backgroundColor: '#f9fafb',
-          borderRadius: '8px',
-          marginTop: '2rem'
+          padding: '4rem 2rem',
+          color: '#4b5563',
+          backgroundColor: '#ffffff',
+          borderRadius: '12px',
+          marginTop: '2rem',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+          maxWidth: '600px',
+          margin: '4rem auto',
+          border: '1px solid #f3f4f6'
         }}>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: '500', marginBottom: '0.5rem' }}>
-            No events found
+          <div style={{
+            width: '80px',
+            height: '80px',
+            margin: '0 auto 1.5rem',
+            borderRadius: '50%',
+            backgroundColor: '#f3f4f6',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <span style={{ fontSize: '2rem' }}>🎉</span>
+          </div>
+          
+          <h3 style={{ 
+            fontSize: '1.5rem', 
+            fontWeight: '600', 
+            marginBottom: '1rem',
+            color: '#1f2937'
+          }}>
+            No Events Yet
           </h3>
-          <p>Check back later for upcoming events or create your own!</p>
+          
+          <p style={{ 
+            fontSize: '1rem',
+            lineHeight: '1.6',
+            marginBottom: '1.5rem',
+            maxWidth: '400px',
+            margin: '0 auto 1.5rem'
+          }}>
+            We're working on bringing exciting events to your area. 
+            Make sure your location is set in your profile to discover nearby events.
+          </p>
+          
+          <div style={{
+            display: 'flex',
+            gap: '1rem',
+            justifyContent: 'center',
+            marginTop: '1.5rem'
+          }}>
+            <button
+              onClick={() => navigate('/profile')}
+              style={{
+                padding: '0.75rem 1.5rem',
+                backgroundColor: '#f3f4f6',
+                color: '#4b5563',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '0.875rem',
+                fontWeight: '500',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = '#e5e7eb';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = '#f3f4f6';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              Update Profile
+            </button>
+            
+            <button
+              onClick={() => window.location.reload()}
+              style={{
+                padding: '0.75rem 1.5rem',
+                backgroundColor: '#1f2937',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '0.875rem',
+                fontWeight: '500',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = '#374151';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = '#1f2937';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              Refresh Events
+            </button>
+          </div>
         </div>
       )}
     </div>
